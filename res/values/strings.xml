@@ -6,7 +6,8 @@
 	
 	<string name="true_button">True</string>
 	<string name="false_button">False</string>
-	<string name="next_button">Next</string>
+	<string name="next_button">Next Question</string>
+	<string name="prev_button">Previous Question</string>
 	
 	<string name="correct_toast">Correct!</string>
 	<string name="incorrect_toast">Incorrect!</string>
