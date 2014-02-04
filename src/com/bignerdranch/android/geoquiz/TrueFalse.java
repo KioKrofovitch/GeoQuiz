@@ -9,7 +9,6 @@ public class TrueFalse {
 	public TrueFalse(int question, boolean trueQuestion, boolean isCheater){
 		mQuestion = question;
 		mTrueQuestion = trueQuestion;
-		mIsCheater = isCheater;
 	}
 
 	public int getQuestion() {
@@ -27,14 +26,5 @@ public class TrueFalse {
 	public void setTrueQuestion(boolean trueQuestion) {
 		mTrueQuestion = trueQuestion;
 	}
-	
-	public boolean isCheater() {
-		return mIsCheater;
-	}
-
-	public void setIsCheater(boolean isCheater) {
-		mIsCheater = isCheater;
-	}
-	
 	
 }

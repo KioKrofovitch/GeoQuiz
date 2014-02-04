@@ -19,6 +19,7 @@ public class QuizActivity extends Activity {
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
 	private static final String KEY_IS_CHEATER = "is_cheater";
+	private static final String KEY_IS_CHEATER_ARRAY = "is_cheater_array";
 
 	private Button mTrueButton;
 	private Button mFalseButton;
@@ -29,8 +30,7 @@ public class QuizActivity extends Activity {
 	
 	private TextView mQuestionTextView;
 	
-	private boolean mIsCheater;
-	
+	// Bank of Questions
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 		new TrueFalse(R.string.question_oceans, true, false),
 		new TrueFalse(R.string.question_mideast, false, false),
@@ -38,6 +38,9 @@ public class QuizActivity extends Activity {
 		new TrueFalse(R.string.question_americas, true, false),
 		new TrueFalse(R.string.question_asia, true, false)
 	};
+	
+	// Save "Cheater Status" of questions.  All values will default to false
+	private boolean[] mCheaterStatus = new boolean[mQuestionBank.length];
 	
 	private int mCurrentIndex = 0;
 	
@@ -58,11 +61,10 @@ public class QuizActivity extends Activity {
         // Check to see if we are actually just redrawing after a state change
         if(savedInstanceState != null) {
         	mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-        	mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER, false);
-        	
-        	//Set Cheater status forever on this question
-        	mQuestionBank[mCurrentIndex].setIsCheater(mIsCheater);
+        	mCheaterStatus = savedInstanceState.getBooleanArray(KEY_IS_CHEATER_ARRAY);
         }
+        
+        Log.d(TAG, "onCreate(): Pacific Ocean CheaterStats: " + mCheaterStatus[0]);
         
         // Link question from bank to view
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
@@ -73,9 +75,6 @@ public class QuizActivity extends Activity {
 			public void onClick(View v) {
 				mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
 				updateQuestion();
-		        
-		        // New question means we need to reset cheater status, unless they've already cheated
-		        mIsCheater = mQuestionBank[mCurrentIndex].isCheater();
 			}
 		});
         
@@ -107,9 +106,6 @@ public class QuizActivity extends Activity {
 			public void onClick(View v) {
 				mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
 				updateQuestion();
-
-				// New question means we need to reset cheater status, unless they've already cheated
-		        mIsCheater = mQuestionBank[mCurrentIndex].isCheater();
 			}
 		});
         
@@ -121,9 +117,6 @@ public class QuizActivity extends Activity {
 			public void onClick(View v) {
 				mCurrentIndex = (mCurrentIndex + mQuestionBank.length - 1) % mQuestionBank.length;
 				updateQuestion();
-		        
-				// New question means we need to reset cheater status, unless they've already cheated
-		        mIsCheater = mQuestionBank[mCurrentIndex].isCheater();
 			}
 		});
         
@@ -149,7 +142,9 @@ public class QuizActivity extends Activity {
     	super.onSaveInstanceState(savedInstanceState);
     	Log.i(TAG, "onSaveInstanceState");
     	savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-    	savedInstanceState.putBoolean(KEY_IS_CHEATER, mIsCheater);
+    	savedInstanceState.putBooleanArray(KEY_IS_CHEATER_ARRAY, mCheaterStatus);
+    	
+    	Log.d(TAG, "onSaveInstanceState: Pacific Ocean CheaterStats: " + mCheaterStatus[0]);
     }
     
     @Override
@@ -196,12 +191,12 @@ public class QuizActivity extends Activity {
     	if( data == null) {
     		return;
     	}
-    	mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+    	mCheaterStatus[mCurrentIndex] = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
     }
     
     // Update Next Question
     private void updateQuestion() {
-    	//Log.d(TAG, "Updating question text for quetion #" + mCurrentIndex, new Exception());
+    	//Log.d(TAG, "Updating question text for question #" + mCurrentIndex, new Exception());
     	int question = mQuestionBank[mCurrentIndex].getQuestion();
         mQuestionTextView.setText(question);
     }
@@ -212,7 +207,7 @@ public class QuizActivity extends Activity {
     	int messageResId = 0;
     	boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
     	
-    	if(mIsCheater) {
+    	if( mCheaterStatus[mCurrentIndex] ) {
     		messageResId = R.string.judgement_toast;
     	} else {
 	    	if(userPressedTrue == answerIsTrue){
