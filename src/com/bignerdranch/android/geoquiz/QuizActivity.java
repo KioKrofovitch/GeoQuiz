@@ -1,7 +1,10 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,11 +41,19 @@ public class QuizActivity extends Activity {
 	
 	private int mCurrentIndex = 0;
 	
+	// Give Android Lint a helpful clue
+	@TargetApi(11)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
+        
+        // Dummy code for SDK lesson
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+	        ActionBar actionBar = getActionBar();
+	        actionBar.setSubtitle("Bodies of Water");
+        }
         
         // Check to see if we are actually just redrawing after a state change
         if(savedInstanceState != null) {

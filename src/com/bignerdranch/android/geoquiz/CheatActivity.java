@@ -1,7 +1,9 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +26,7 @@ public class CheatActivity extends Activity {
 	
 	private TextView mAnswerTextView;
 	private Button mShowAnswer;
+	private TextView mApiLevel;
 	
 	private void setAnswerShownResult(boolean isAnswerShown){
 		Intent data = new Intent();
@@ -37,6 +40,10 @@ public class CheatActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cheat);
 		
+		// Set API Level for Ch. 6 Challenge
+		mApiLevel = (TextView) findViewById(R.id.apiLevelTextView);
+		mApiLevel.setText( getString(R.string.api_level) + Build.VERSION.SDK_INT);
+	
 		mIsCheater = false;
 		
         // Check to see if we are actually just redrawing after a state change
