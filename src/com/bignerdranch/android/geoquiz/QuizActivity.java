@@ -18,7 +18,6 @@ public class QuizActivity extends Activity {
 	
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
-	private static final String KEY_IS_CHEATER = "is_cheater";
 	private static final String KEY_IS_CHEATER_ARRAY = "is_cheater_array";
 
 	private Button mTrueButton;

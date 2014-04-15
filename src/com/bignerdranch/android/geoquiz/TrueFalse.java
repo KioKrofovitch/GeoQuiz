@@ -4,7 +4,6 @@ public class TrueFalse {
 	
 	private int mQuestion;
 	private boolean mTrueQuestion;
-	private boolean mIsCheater;
 	
 	public TrueFalse(int question, boolean trueQuestion, boolean isCheater){
 		mQuestion = question;
